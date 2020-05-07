@@ -1,6 +1,6 @@
 # lfp-rsocket-router
 
-```
+```java
 public class Example {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yy");
 
