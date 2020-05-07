@@ -4,14 +4,16 @@ Routing payloads in RSocket can be a PIA. This library hopes to minimize that by
 
 Here is a simple example. We can add a filter to the server that requires a password:
 ```java
-
 Function<Payload, Mono<Payload>> passSuccessFunction = null; // implement however you want
 serverRouter.addRequestResponseHandler(payload -> {
+	//require password in the metadata
 	return payload.getMetadataUtf8().contains("password");
 }, passSuccessFunction);
 Function<Payload, Mono<Payload>> passFailFallbackFunction = null; // implement however you want
-serverRouter.addRequestResponseHandler(payload -> true, passFailFallbackFunction);
-
+serverRouter.addRequestResponseHandler(payload -> {
+	//accept everything
+	return true;
+}, passFailFallbackFunction);
 ```
 We could expand on this and map the server handler and the client function into something more useable:
 
