@@ -1,6 +1,6 @@
 # lfp-rsocket-router
 
-Routing payloads in RSocket can be a PIA. This library hopes to minimize that by wrapping both clients and servers in "routers". These routers allow clients to generate functions, and servers to accept handlers. Client routers can be attached to multiple client RSockets, and each server router accepts mutiple handlers.
+Routing and serializing payloads in RSocket can be a PIA. This library hopes to minimize that by wrapping both clients and servers in "routers". These routers allow clients to generate functions, and servers to accept handlers. Client routers can be attached to multiple client RSockets, and each server router accepts mutiple handlers.
 
 Here is a simple example. We can add a filter to the server that requires a password:
 ```java
@@ -57,7 +57,7 @@ This outputs:
 [server] - got fail message:this should NOT work
 [client] - fail - this should NOT work
 ```
-
+Here's a more complex example that creates a date parsing function.
 ```java
 private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yy");
 
