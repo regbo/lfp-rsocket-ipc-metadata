@@ -5,13 +5,9 @@ private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/
 
 public static void main(String[] args) {
 	RSocketServerRouter serverRouter = RSocketServerRouter.create();
-	RSocketClientRouter clientRouter;
-	{
-		RSocketServer.create(SocketAcceptor.with(serverRouter)).errorConsumer(t -> t.printStackTrace())
-				.bind(TcpServerTransport.create("localhost", 7000)).block();
-		RSocket client = RSocketConnector.create().connect(TcpClientTransport.create("localhost", 7000)).block();
-		clientRouter = RSocketClientRouter.createAttached(client);
-	}
+	createServer(serverRouter);
+	RSocket client = createClient();
+	RSocketClientRouter clientRouter = RSocketClientRouter.createAttached(client);
 	Disposable serverFuncDisposable = serverRouter.addRequestResponseHandler(p -> true, createDateParserHandler());
 	Function<String, Date> clientFunction = createClientFunction(clientRouter.getRequestResponseFunction());
 	System.out.println(clientFunction.apply(new Date().getTime() + ""));
@@ -49,15 +45,18 @@ private static Function<Payload, Mono<Payload>> createDateParserHandler() {
 	};
 	parser = parser.andThen(v -> Objects.requireNonNull(v));
 	Function<Payload, Date> mappedInput = parser.compose(p -> p.getDataUtf8());
-	Function<Payload, Mono<Payload>> mapped = mappedInput.andThen(d -> d.getTime() + "")
+	Function<Payload, Mono<Payload>> mapped = mappedInput.andThen(Date::getTime).andThen(Object::toString)
 			.andThen(ByteBufPayload::create).andThen(Mono::just);
 	return mapped;
 }
 
+private static CloseableChannel createServer(RSocketServerRouter serverRouter) {
+	return RSocketServer.create(SocketAcceptor.with(serverRouter)).errorConsumer(t -> t.printStackTrace())
+			.bind(TcpServerTransport.create("localhost", 7000)).block();
 
+}
 
-//prints:
-//Thu May 07 12:24:02 EDT 2020
-//Thu May 07 00:00:00 EDT 2020
-//Wed Dec 31 19:00:00 EST 1969
+private static RSocket createClient() {
+	return RSocketConnector.create().connect(TcpClientTransport.create("localhost", 7000)).block();
+}
 ```
