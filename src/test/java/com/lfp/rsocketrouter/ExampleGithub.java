@@ -42,41 +42,41 @@ public class ExampleGithub {
 		}
 
 		if (true) {
-			Consumer<String> SERVER_LOGGER = s -> System.out.println("[server] - " + s);
-			Consumer<String> CLIENT_LOGGER = s -> System.out.println("[client] - " + s);
+Consumer<String> SERVER_LOGGER = s -> System.out.println("[server] - " + s);
+Consumer<String> CLIENT_LOGGER = s -> System.out.println("[client] - " + s);
 
-			// add passing logic
-			Function<String, String> passSuccessStringExample = s -> {
-				SERVER_LOGGER.accept("got success message:" + s);
-				return "success - " + s;
-			};
-			Function<Payload, Mono<Payload>> passSuccessFunction = passSuccessStringExample
-					.andThen(ByteBufPayload::create).andThen(Mono::just).compose(Payload::getDataUtf8);
-			serverRouter.addRequestResponseHandler(payload -> {
-				// require password in the metadata
-				return payload.getMetadataUtf8().contains("password");
-			}, passSuccessFunction);
+// add passing logic
+Function<String, String> passSuccessStringExample = s -> {
+	SERVER_LOGGER.accept("got success message:" + s);
+	return "success - " + s;
+};
+Function<Payload, Mono<Payload>> passSuccessFunction = passSuccessStringExample
+		.andThen(ByteBufPayload::create).andThen(Mono::just).compose(Payload::getDataUtf8);
+serverRouter.addRequestResponseHandler(payload -> {
+	// require password in the metadata
+	return payload.getMetadataUtf8().contains("password");
+}, passSuccessFunction);
 
-			// add failing fallback logic
-			Function<String, String> passFailFallbackStringFunction = s -> {
-				SERVER_LOGGER.accept("got fail message:" + s);
-				return "fail - " + s;
-			};
-			Function<Payload, Mono<Payload>> passFailFallbackFunction = passFailFallbackStringFunction
-					.andThen(ByteBufPayload::create).andThen(Mono::just).compose(Payload::getDataUtf8);
-			serverRouter.addRequestResponseHandler(payload -> {
-				// accept everything
-				return true;
-			}, passFailFallbackFunction);
+// add failing fallback logic
+Function<String, String> passFailFallbackStringFunction = s -> {
+	SERVER_LOGGER.accept("got fail message:" + s);
+	return "fail - " + s;
+};
+Function<Payload, Mono<Payload>> passFailFallbackFunction = passFailFallbackStringFunction
+		.andThen(ByteBufPayload::create).andThen(Mono::just).compose(Payload::getDataUtf8);
+serverRouter.addRequestResponseHandler(payload -> {
+	// accept everything
+	return true;
+}, passFailFallbackFunction);
 
-			// create client function
-			Function<Payload, Mono<Payload>> clientFunction = clientRouter.getRequestResponseFunction();
-			Function<Tuple2<String, String>, String> clientTupleFunction = clientFunction.andThen(Mono::block)
-					.andThen(Payload::getDataUtf8).compose(tup -> ByteBufPayload.create(tup.getT1(), tup.getT2()));
+// create client function
+Function<Payload, Mono<Payload>> clientFunction = clientRouter.getRequestResponseFunction();
+Function<Tuple2<String, String>, String> clientTupleFunction = clientFunction.andThen(Mono::block)
+		.andThen(Payload::getDataUtf8).compose(tup -> ByteBufPayload.create(tup.getT1(), tup.getT2()));
 
-			// use the client function
-			CLIENT_LOGGER.accept(clientTupleFunction.apply(Tuples.of("this should work", "xxxpasswordxxx")));
-			CLIENT_LOGGER.accept(clientTupleFunction.apply(Tuples.of("this should NOT work", "xxxzzzzzxxx")));
+// use the client function
+CLIENT_LOGGER.accept(clientTupleFunction.apply(Tuples.of("this should work", "xxxpasswordxxx")));
+CLIENT_LOGGER.accept(clientTupleFunction.apply(Tuples.of("this should NOT work", "xxxzzzzzxxx")));
 		}
 
 	}

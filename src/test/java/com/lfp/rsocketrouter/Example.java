@@ -62,9 +62,8 @@ public class Example {
 			return null;
 		};
 		parser = parser.andThen(v -> Objects.requireNonNull(v));
-		Function<Payload, Date> mappedInput = parser.compose(p -> p.getDataUtf8());
-		Function<Payload, Mono<Payload>> mapped = mappedInput.andThen(Date::getTime).andThen(Object::toString)
-				.andThen(ByteBufPayload::create).andThen(Mono::just);
+		Function<Payload, Mono<Payload>> mapped = parser.andThen(Date::getTime).andThen(Object::toString)
+				.andThen(ByteBufPayload::create).andThen(Mono::just).compose(p -> p.getDataUtf8());
 		return mapped;
 	}
 

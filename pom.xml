@@ -36,6 +36,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.github.rsocket.rsocket-rpc-java</groupId>
+			<artifactId>rsocket-ipc-core</artifactId>
+			<version>fa269a4</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13</version>

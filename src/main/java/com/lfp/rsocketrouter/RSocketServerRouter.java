@@ -46,13 +46,13 @@ public interface RSocketServerRouter extends RSocket {
 
 	// REQUEST RESPONSE
 
-	default Disposable addRequestResponseHandler(Predicate<Payload> predicate,
-			Function<Payload, Mono<Payload>> function) {
+	default Disposable addRequestResponseHandler(Predicate<? extends Payload> predicate,
+			Function<? extends Payload, Mono<Payload>> function) {
 		return addRequestResponseHandler(-1, predicate, function);
 	}
 
-	default Disposable addRequestResponseHandler(int index, Predicate<Payload> predicate,
-			Function<Payload, Mono<Payload>> function) {
+	default Disposable addRequestResponseHandler(int index, Predicate<? extends Payload> predicate,
+			Function<? extends Payload, Mono<Payload>> function) {
 		return addRequestResponseHandler(-1, Utils.asOptionalFunction(predicate, function));
 	}
 
