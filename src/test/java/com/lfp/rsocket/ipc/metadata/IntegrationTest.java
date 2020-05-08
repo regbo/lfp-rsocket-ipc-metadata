@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,8 +16,11 @@ import io.rsocket.ipc.Client;
 import io.rsocket.ipc.IPCRSocket;
 import io.rsocket.ipc.RequestHandlingRSocket;
 import io.rsocket.ipc.Server;
+import io.rsocket.ipc.decoders.MetadataDecoderLFP;
+import io.rsocket.ipc.encoders.MetadataEncoderLFP;
 import io.rsocket.ipc.marshallers.Primitives;
 import io.rsocket.ipc.marshallers.Strings;
+import io.rsocket.ipc.mimetype.MimeTypes;
 import io.rsocket.transport.netty.client.TcpClientTransport;
 import io.rsocket.transport.netty.server.TcpServerTransport;
 import reactor.core.Disposable;
@@ -106,10 +108,12 @@ public class IntegrationTest {
 		Disposable encoderPasswordDisposable = null;
 		for (int i = 0; i < 3; i++) {
 			if (i == 1) {
-				encoderPasswordDisposable = encoder.addInterceptor(
-						writer -> writer.writeString(MimeTypes.create("password"), "thisIsACoolPassWord!"));
+				encoderPasswordDisposable = encoder.addInterceptor(writer -> {
+					//writer.writeString(MimeTypes.create("password"), "AAAAAAAAAAAA");
+					writer.writeString(MimeTypes.create("password"), "thisIsACoolPassWord!");
+				});
 				decoder.addInterceptor(reader -> {
-					boolean match = reader.containsString(MimeTypes.create("password"), "thisIsACoolPassWord!");
+					boolean match = reader.containsStringSecure(MimeTypes.create("password"), "thisIsACoolPassWord!");
 					if (!match)
 						throw new IllegalArgumentException("not authorized");
 				});

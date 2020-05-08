@@ -1,4 +1,4 @@
-package com.lfp.rsocket.ipc.metadata;
+package io.rsocket.ipc.mimetype;
 
 import io.rsocket.metadata.WellKnownMimeType;
 

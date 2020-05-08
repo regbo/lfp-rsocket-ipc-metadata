@@ -1,4 +1,4 @@
-package com.lfp.rsocket.ipc.metadata;
+package io.rsocket.ipc.decoders;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
@@ -18,6 +18,8 @@ import java.util.stream.Stream;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.CompositeByteBuf;
+import io.rsocket.ipc.mimetype.MimeType;
+import io.rsocket.ipc.utils.MetadataUtils;
 import io.rsocket.metadata.CompositeMetadataFlyweight;
 import io.rsocket.metadata.WellKnownMimeType;
 

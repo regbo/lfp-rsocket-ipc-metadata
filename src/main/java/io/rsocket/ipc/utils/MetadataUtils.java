@@ -1,4 +1,4 @@
-package com.lfp.rsocket.ipc.metadata;
+package io.rsocket.ipc.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

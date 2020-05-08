@@ -1,9 +1,10 @@
-package com.lfp.rsocket.ipc.metadata;
+package io.rsocket.ipc.mimetype;
 
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import io.rsocket.ipc.utils.MetadataUtils;
 import io.rsocket.metadata.WellKnownMimeType;
 
 public interface MimeType {
