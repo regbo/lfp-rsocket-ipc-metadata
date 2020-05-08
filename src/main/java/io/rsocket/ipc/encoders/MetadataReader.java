@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 import io.netty.buffer.ByteBuf;
 import io.rsocket.ipc.mimetype.MimeType;
 import io.rsocket.ipc.mimetype.MimeTypes;
-import io.rsocket.ipc.utils.MetadataUtils;
+import io.rsocket.ipc.util.MetadataUtils;
 import io.rsocket.metadata.CompositeMetadata;
 
 public class MetadataReader {

@@ -19,7 +19,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.CompositeByteBuf;
 import io.rsocket.ipc.mimetype.MimeType;
-import io.rsocket.ipc.utils.MetadataUtils;
+import io.rsocket.ipc.util.MetadataUtils;
 import io.rsocket.metadata.CompositeMetadataFlyweight;
 import io.rsocket.metadata.WellKnownMimeType;
 

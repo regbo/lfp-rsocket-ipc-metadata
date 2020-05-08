@@ -1,4 +1,4 @@
-package io.rsocket.ipc.utils;
+package io.rsocket.ipc.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.Spliterators.AbstractSpliterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -22,6 +23,8 @@ import java.util.stream.StreamSupport;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.rsocket.metadata.WellKnownMimeType;
+import reactor.core.Disposable;
+import reactor.core.Disposables;
 
 public class MetadataUtils {
 	public static final Charset CHARSET = StandardCharsets.UTF_8;
@@ -146,4 +149,20 @@ public class MetadataUtils {
 		return Optional.ofNullable(result);
 	}
 
+	public static class DisposableAddList<X> extends CopyOnWriteArrayList<X> {
+
+		private static final long serialVersionUID = 1L;
+
+		public static <XX> DisposableAddList<XX> create() {
+			return new DisposableAddList<XX>();
+		}
+
+		public Disposable disposableAdd(X value) {
+			Disposable disposable = Disposables.composite(() -> {
+				this.removeIf(v -> v == value);
+			});
+			this.add(value);
+			return disposable;
+		}
+	}
 }

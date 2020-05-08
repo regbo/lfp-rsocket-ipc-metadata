@@ -16,8 +16,8 @@ import io.opentracing.SpanContext;
 import io.rsocket.ipc.MetadataEncoder;
 import io.rsocket.ipc.decoders.MetadataWriter;
 import io.rsocket.ipc.mimetype.MimeTypes;
-import io.rsocket.ipc.utils.DisposableAddList;
-import io.rsocket.ipc.utils.MetadataUtils;
+import io.rsocket.ipc.util.MetadataUtils;
+import io.rsocket.ipc.util.MetadataUtils.DisposableAddList;
 import reactor.core.Disposable;
 
 public class MetadataEncoderLFP implements MetadataEncoder {

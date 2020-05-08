@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import io.rsocket.ipc.utils.MetadataUtils;
+import io.rsocket.ipc.util.MetadataUtils;
 import io.rsocket.metadata.WellKnownMimeType;
 
 public interface MimeType {
