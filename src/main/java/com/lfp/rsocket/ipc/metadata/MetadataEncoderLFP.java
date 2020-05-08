@@ -54,11 +54,11 @@ public class MetadataEncoderLFP implements MetadataEncoder {
 	protected void writeMetadata(MetadataWriter metadataWriter, SpanContext spanContext, String service,
 			String... parts) {
 		interceptors.forEach(interceptor -> interceptor.accept(metadataWriter));
-		appendRouting(metadataWriter, service, parts);
-		appendTracing(metadataWriter, spanContext);
+		writeRoutingInfo(metadataWriter, service, parts);
+		writeTracingSpanContext(metadataWriter, spanContext);
 	}
 
-	private void appendRouting(MetadataWriter metadataWriter, String service, String... parts) {
+	private void writeRoutingInfo(MetadataWriter metadataWriter, String service, String... parts) {
 		metadataWriter.writeString(MimeTypes.MIME_TYPE_SERVICE, service);
 		Stream<String> methodsStream = parts == null ? Stream.empty()
 				: Arrays.asList(parts).stream().filter(MetadataUtils::nonEmpty);
@@ -67,7 +67,7 @@ public class MetadataEncoderLFP implements MetadataEncoder {
 		});
 	}
 
-	private void appendTracing(MetadataWriter metadataWriter, SpanContext spanContext) {
+	private void writeTracingSpanContext(MetadataWriter metadataWriter, SpanContext spanContext) {
 		if (spanContext == null)
 			return;
 		Iterable<Entry<String, String>> items = spanContext.baggageItems();

@@ -53,7 +53,7 @@ public class MetadataDecoderLFP implements MetadataDecoder {
 	protected <RESULT> RESULT decode(ByteBuf data, MetadataReader metadataReader, ByteBuf metadata,
 			Handler<RESULT> transformer) throws Exception {
 		String route = getRoute(metadataReader);
-		SpanContext context = getSpanContext(metadataReader);
+		SpanContext context = readTracingSpanContext(metadataReader);
 		RESULT result = transformer.handleAndReply(data, metadata, route, context);
 		return result;
 	}
@@ -66,7 +66,7 @@ public class MetadataDecoderLFP implements MetadataDecoder {
 		return route;
 	}
 
-	private SpanContext getSpanContext(MetadataReader metadataReader) {
+	private SpanContext readTracingSpanContext(MetadataReader metadataReader) {
 		if (tracer == null)
 			return null;
 		Map<String, String> tracerMetadata = new LinkedHashMap<>();

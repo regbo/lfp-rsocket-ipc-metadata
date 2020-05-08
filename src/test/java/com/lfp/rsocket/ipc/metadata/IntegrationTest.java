@@ -30,22 +30,20 @@ public class IntegrationTest {
 
 	private static final Class<?> THIS_CLASS = new Object() {
 	}.getClass().getEnclosingClass();
-	private static final Logger SERVER_LOGGER = java.util.logging.Logger
-			.getLogger(THIS_CLASS.getName() + " - [server]");
 
 	@SuppressWarnings("deprecation")
 	@Test
 	public void test() {
 		MetadataDecoderLFP decoder = new MetadataDecoderLFP();
-		MetadataEncoderLFP encoder = new MetadataEncoderLFP();
 		RequestHandlingRSocket requestHandler = new RequestHandlingRSocket(decoder);
 		{// start server
 			SocketAcceptor socketAcceptor = (setup, client) -> Mono.just(requestHandler);
 			RSocketServer.create(socketAcceptor).interceptors(ir -> {
 			}).errorConsumer(t -> {
-				SERVER_LOGGER.log(Level.SEVERE, "uncaught error", t);
+				java.util.logging.Logger.getLogger("[server]").log(Level.SEVERE, "uncaught error", t);
 			}).bind(TcpServerTransport.create("localhost", 7000)).block();
 		}
+		MetadataEncoderLFP encoder = new MetadataEncoderLFP();
 		RSocket rsocket;
 		{// start client
 			rsocket = RSocketConnector.create().connect(TcpClientTransport.create("localhost", 7000)).block();
