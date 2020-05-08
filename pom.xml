@@ -3,18 +3,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.lfp</groupId>
-	<artifactId>rsocket-router</artifactId>
+	<artifactId>rsocket-ipc-metadata</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>rsocket-router</name>
-	<description>router for rsocket</description>
+	<name>rsocket-ipc-metadata</name>
+	<description>improved metadata handling for rsocket rpc java</description>
 	<packaging>jar</packaging>
 	<properties>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<io.rsocket.groupId>com.github.rsocket.rsocket-java</io.rsocket.groupId>
-		<io.rsocket.version>c9a4f064ca1fe8fb06b67f7ac09ba2777bbb5634</io.rsocket.version>
+		<io.rsocket.groupId>io.rsocket</io.rsocket.groupId>
+		<io.rsocket.version>1.0.0-RC7</io.rsocket.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -30,16 +30,29 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.github.regbo.lfp-rsocket-rpc-java</groupId>
+			<artifactId>rsocket-ipc-core</artifactId>
+			<version>5da8d3cc4489d43517fa63a1d7941900d9c0158c</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.rsocket</groupId>
+					<artifactId>rsocket-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
 			<groupId>${io.rsocket.groupId}</groupId>
 			<artifactId>rsocket-transport-netty</artifactId>
 			<version>${io.rsocket.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.rsocket.rsocket-rpc-java</groupId>
-			<artifactId>rsocket-ipc-core</artifactId>
-			<version>fa269a4</version>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
+			<version>3.3.5.RELEASE</version>
+			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
